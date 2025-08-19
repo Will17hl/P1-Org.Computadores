@@ -1,5 +1,11 @@
 # ALU32 – Parcial en Nand2Tetris
 
+### Integrantes del equipo
+
+William Andrés Henao López
+Carlos David Sanchez Soto
+Laura Sofía Jiménez Paris
+
 ## Descripción
 
 Este proyecto implementa una **ALU de 32 bits** construida a partir de dos mitades de 16 bits.
@@ -10,10 +16,12 @@ Mantiene la misma semántica de control que la **ALU16** del curso, pero añade 
 La ALU32 recibe dos operandos de 32 bits (`x`, `y`) y un conjunto de señales de control (`zx, nx, zy, ny, f, no`).
 Dependiendo de dichas señales, la ALU puede:
 
+
 * Forzar entradas a cero (`zx`, `zy`).
 * Negar entradas (`nx`, `ny`).
 * Calcular `x & y` o `x + y` según `f`.
 * Negar el resultado final (`no`).
+
 
 Además, la ALU produce cuatro banderas de estado:
 
