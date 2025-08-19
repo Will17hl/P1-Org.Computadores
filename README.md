@@ -2,9 +2,9 @@
 
 ### Integrantes del equipo
 
-William Andrés Henao López
-Carlos David Sanchez Soto
-Laura Sofía Jiménez Paris
+* William Andrés Henao López
+* Carlos David Sanchez Soto
+* Laura Sofía Jiménez Paris
 
 ## Descripción
 
