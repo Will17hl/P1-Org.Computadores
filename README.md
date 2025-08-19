@@ -11,6 +11,11 @@
 Este proyecto implementa una **ALU de 32 bits** construida a partir de dos mitades de 16 bits.
 Mantiene la misma semántica de control que la **ALU16** del curso, pero añade **banderas extra** para manejar carry y overflow en operaciones de suma.
 
+## Diagrama 
+
+<img width="1298" height="775" alt="image" src="https://github.com/user-attachments/assets/e7e3b361-afc6-4063-a8f5-5ab7687e2481" />
+
+
 ## Funcionalidad
 
 La ALU32 recibe dos operandos de 32 bits (`x`, `y`) y un conjunto de señales de control (`zx, nx, zy, ny, f, no`).
@@ -108,12 +113,16 @@ Además, la ALU produce cuatro banderas de estado:
 
 ## Pruebas realizadas
 
-* **Operaciones lógicas** (`AND`, negaciones de entrada y salida).
-* **Operaciones aritméticas** (`+`, con y sin carry).
-* **Casos especiales**:
+Debido a las limitaciones del entorno **nand2tetris**, no fue posible realizar pruebas automatizadas sobre la ALU de 32 bits. El software Tools está diseñado únicamente para trabajar con unidades de **16 bits** (ALU16), sin soporte directo para una extensión a 32 bits.
 
-  * `0 + 0 → zr=1`.
-  * Suma de valores positivos que produce negativo → `ovf=1`.
-  * Suma de valores negativos que produce positivo → `ovf=1`.
-  * Sumas con carry propagado entre mitades → `cout=1`.
+ En consecuencia:
+
+- No se generaron archivos `.tst` ni `.cmp` para esta versión de 32 bits.  
+- La verificación funcional se realizó **manualmente**, evaluando casos clave como:
+  - Operaciones lógicas (`AND`, negaciones de entradas y salida).
+  - Operaciones aritméticas (`+`), con y sin acarreo.
+  - Casos especiales:
+    - `0 + 0 → zr = 1`
+    - Suma que causa overflow (valor positivo que resulta negativo o viceversa)
+    - Propagación de carry entre las mitades de 16 bits (`cout = 1`)
 
