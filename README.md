@@ -13,6 +13,23 @@ Mantiene la misma semántica de control que la **ALU16** del curso, pero añade 
 
 ## Diagrama 
 
+El siguiente diagrama muestra la construcción de una **ALU de 32 bits** a partir de bloques de 16 bits de *nand2tetris*.  
+
+- Se divide en dos secciones:  
+  - **LSB (Least Significant Bits)**: 16 bits menos significativos.  
+  - **MSB (Most Significant Bits)**: 16 bits más significativos.  
+
+- Usa componentes básicos (`Mux16`, `Not`, `AND16`, `ADD16`) para:  
+  - Operaciones lógicas (`AND`).  
+  - Operaciones aritméticas (suma con acarreo entre las dos mitades).  
+
+- La salida final de 32 bits incluye además **banderas de estado**:  
+  - `zr` → indica si el resultado es cero.  
+  - `ng` → indica si el resultado es negativo.  
+  - `cout` → acarreo.  
+  - `ovf` → desbordamiento.
+  
+
 <img width="1298" height="775" alt="image" src="https://github.com/user-attachments/assets/e7e3b361-afc6-4063-a8f5-5ab7687e2481" />
 
 
