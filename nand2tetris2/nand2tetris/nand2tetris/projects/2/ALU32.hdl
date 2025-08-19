@@ -1,0 +1,79 @@
+// ALU de 32 bits hecha con dos mitades de 16 bits,
+// misma semántica de control que tu ALU de 16.
+// Flags: zr, ng, cout (carry-out de 32b), ovf (overflow de suma en C2).
+
+CHIP ALU32 {
+    IN  x[32], y[32],
+        zx, nx, zy, ny, f, no;
+    OUT out[32], zr, ng, cout, ovf;
+
+    PARTS:
+    // ---------- Pre-proceso X (igual que en tu ALU16), por mitades ----------
+    // Zero x si zx=1
+    Mux16(a=x[0..15],  b=false, sel=zx, out=xz_lo);
+    Mux16(a=x[16..31], b=false, sel=zx, out=xz_hi);
+    // Not opcional nx
+    Not16(in=xz_lo, out=nx_lo);
+    Not16(in=xz_hi, out=nx_hi);
+    Mux16(a=xz_lo, b=nx_lo, sel=nx, out=xx_lo);
+    Mux16(a=xz_hi, b=nx_hi, sel=nx, out=xx_hi);
+
+    // ---------- Pre-proceso Y ----------
+    Mux16(a=y[0..15],  b=false, sel=zy, out=yz_lo);
+    Mux16(a=y[16..31], b=false, sel=zy, out=yz_hi);
+    Not16(in=yz_lo, out=ny_lo);
+    Not16(in=yz_hi, out=ny_hi);
+    Mux16(a=yz_lo, b=ny_lo, sel=ny, out=yy_lo);
+    Mux16(a=yz_hi, b=ny_hi, sel=ny, out=yy_hi);
+
+    // ---------- Ruta AND ----------
+    And16(a=xx_lo, b=yy_lo, out=and_lo);
+    And16(a=xx_hi, b=yy_hi, out=and_hi);
+
+    // ---------- Ruta ADD con ripple carry (acarreo real 32b) ----------
+    // Baja: cin = 0
+    Add16CF(a=xx_lo, b=yy_lo, cin=false, out=add_lo, cout=c_lo);
+    // Alta: cin = c_lo si estamos sumando (f=1), si no 0
+    And(a=c_lo, b=f, out=cin_hi);
+    Add16CF(a=xx_hi, b=yy_hi, cin=cin_hi, out=add_hi, cout=c_hi);
+
+    // ---------- Selección por f (0=AND, 1=ADD) ----------
+    Mux16(a=and_lo, b=add_lo, sel=f, out=fxy_lo);
+    Mux16(a=and_hi, b=add_hi, sel=f, out=fxy_hi);
+
+    // ---------- no (negación del resultado) ----------
+    Not16(in=fxy_lo, out=nfxy_lo);
+    Not16(in=fxy_hi, out=nfxy_hi);
+    Mux16(a=fxy_lo, b=nfxy_lo, sel=no, out=res_lo);
+    Mux16(a=fxy_hi, b=nfxy_hi, sel=no, out=res_hi);
+
+    // ---------- Salida 32b ----------
+    // (No usar el pin de salida 'out' como entrada en ningún cálculo)
+    Mux16(a=false, b=res_lo, sel=true, out=out[0..15]);
+    Mux16(a=false, b=res_hi, sel=true, out=out[16..31]);
+
+    // ---------- Flags ----------
+    // zr = (out == 0)
+    Or16Way(in=res_lo, out=anyLo);
+    Or16Way(in=res_hi, out=anyHi);
+    Or(a=anyLo, b=anyHi, out=any32);
+    Not(in=any32, out=zr);
+
+    // ng = bit 31 del resultado final
+    MSB16(in=res_hi, out=ng);
+
+    // cout = acarreo de la suma de 32 bits (solo tiene sentido si f=1)
+    // (si f=0, lo dejamos igual)
+    Or(a=false, b=c_hi, out=cout);
+
+    // ovf = overflow de suma con complemento a dos (solo si f=1)
+    // Fórmula: ovf = (signX == signY) AND (signSum != signX)
+    MSB16(in=xx_hi,  out=sx);
+    MSB16(in=yy_hi,  out=sy);
+    MSB16(in=add_hi, out=ss);       // usar la suma antes de 'no'
+    Xor(a=sx, b=sy,  out=sx_xor_sy);
+    Not(in=sx_xor_sy, out=sameSign);
+    Xor(a=ss, b=sx,  out=sum_xor_sx);
+    And(a=sameSign, b=sum_xor_sx, out=ov_core);
+    And(a=ov_core,  b=f,          out=ovf);
+}

@@ -1,0 +1,45 @@
+CHIP ALUPZ {
+    
+    IN  
+        x[16], y[16], z[16],  // 16-bit inputs        
+        zx, // zero the x input
+        nx, // negate the x input
+        zy, // zero the y input
+        ny, // negate the y input
+        f,  // compute (out = x + y) or (out = x & y)
+        no, // negate the out output
+        sel[2];
+    OUT 
+        out[16];// 16-bit output
+
+    PARTS:
+
+    // ZX and ZY
+    Mux16(a=x, b[0]=false, sel=zx, out=zerox); // 16
+    Mux16(a=y, b[0]=false, sel=zy, out=zeroy); // 16
+
+    // NX and NY
+    Not16(in=zerox, out=notzerox); // 16 
+    Not16(in=zeroy, out=notzeroy); // 16
+    Mux16(a=zerox, b=notzerox, sel=nx, out=zeroxornotx); // 16
+    Mux16(a=zeroy, b=notzeroy, sel=ny, out=zeroyornoty); // 16
+
+    // F
+    Add16(a=zeroxornotx, b=zeroyornoty, out=addxy); // 77 
+    And16(a=zeroxornotx, b=zeroyornoty, out=andxy); // 16
+    Mux16(a=andxy, b=addxy, sel=f, out=outf); // 16
+
+    // NO
+    Not16(in=outf, out=notoutf); // 16
+    Mux16(a=outf, b=notoutf, sel=no, out=outtemp); // 16
+
+    // SEL
+    Add16(a=outtemp, b=z, out=xyaddz); // 77
+    Sub16(a=outtemp, b=z, out=xysubz); // 170
+
+    Mux16(a=outtemp, b=xysubz, sel=sel[1], out=outtemp2); // 16
+    Mux16(a=outtemp2, b=xyaddz, sel=sel[0], out=out); // 16
+
+    // TOTAL LOGIC GATES = 516
+
+}

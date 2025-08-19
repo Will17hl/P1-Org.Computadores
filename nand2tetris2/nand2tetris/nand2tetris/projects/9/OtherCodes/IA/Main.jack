@@ -1,0 +1,19 @@
+class Main {
+
+    function void main() {
+
+        var int edad;
+        var int edadFutura;
+
+        let edad = Keyboard.readInt("Ingrese su edad: ");
+
+        let edadFutura = edad + 10;
+
+        do Output.printString("En 10 anos su edad va a ser: ");
+        do Output.printInt(edadFutura);
+        return;
+        
+
+    }
+
+}

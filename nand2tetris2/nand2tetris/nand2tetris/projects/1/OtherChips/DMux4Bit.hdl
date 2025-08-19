@@ -1,0 +1,11 @@
+CHIP DMux4Bit {
+
+    IN in[4], sel;
+    OUT a[4], b[4];
+
+    PARTS:
+    Not(in=sel, out=NotSel);
+    And4to1(a=in, b=NotSel, out=a);
+    And4to1(a=in, b=sel, out=b);
+
+}

@@ -1,0 +1,13 @@
+CHIP Mux4Bit {
+
+    IN a[4], b[4], sel;
+    OUT out[4];
+
+    PARTS:
+    Not(in=sel, out=NotSel);
+    And4to1(a=a, b=NotSel, out=And1);
+    And4to1(a=b, b=sel, out=And2);
+    Or4(a=And1, b=And2, out=out);
+
+
+}

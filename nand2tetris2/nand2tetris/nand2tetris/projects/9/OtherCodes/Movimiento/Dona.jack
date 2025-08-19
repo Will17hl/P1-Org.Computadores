@@ -1,0 +1,158 @@
+class Dona {
+
+    field int direction;
+    field int x , y, R, r;
+
+    constructor Dona new(int ax, int ay, int aR, int ar) {
+        let x = ax;
+        let y = ay;
+        let R = aR;
+        let r = ar;
+        let direction = 0;
+        do DibujarDona();
+        return this;
+    }
+
+    method void run() {
+
+        var char key;
+
+        while (true) {
+            // waits for a key to be pressed
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+            }
+
+            if (key = 131) { 
+                
+                let direction = 1; 
+                do MoverDona();
+
+                // waits for the key to be released
+                while (key = 131) {
+                    let key = Keyboard.keyPressed();
+                }
+            
+            }   // up arrow
+            if (key = 133) { 
+                
+                let direction = 2; 
+                do MoverDona();
+
+                // waits for the key to be released
+                while (key = 133) {
+                    let key = Keyboard.keyPressed();
+                }    
+            }   // down arrow
+            if (key = 130) { 
+                
+                let direction = 3;
+                do MoverDona();
+
+                // waits for the key to be released
+                while (key = 130) {
+                    let key = Keyboard.keyPressed();
+                }
+            
+            }   // left arrow
+            if (key = 132) { 
+                
+                let direction = 4;
+                do MoverDona();
+
+                // waits for the key to be released
+                while (key = 132) {
+                    let key = Keyboard.keyPressed();
+                }
+            
+            }   // right arrow
+        
+
+        }
+
+        return;
+    }
+
+    method void MoverDona(){
+
+        // MOVER ARRIBA
+        if (direction = 1) {
+
+            if (y > R){
+
+                do BorrarDona();
+                let y = y - 5;
+                do DibujarDona();
+                //do Output.printInt(y);
+
+            }
+
+        }
+        // MOVER ABAJO
+        if (direction = 2) {
+
+            if (y+5+R < 256) {
+
+                do BorrarDona();
+                let y = y + 5;
+                do DibujarDona();
+                //do Output.printInt(y+5+R);
+
+            }
+
+        }
+        // MOVER IZQUIERDA
+        if (direction = 3) {
+
+            if (x > R) {
+
+                do BorrarDona();
+                let x = x - 5;
+                do DibujarDona();
+                //do Output.printInt(x);
+
+            }
+
+
+        }
+        // MOVER DERECHA
+        if (direction = 4) {
+
+            if (x + 5 + R < 515) {
+
+                do BorrarDona();
+                let x = x + 5;
+                do DibujarDona();
+                //do Output.printInt(x+5+R);
+
+            }
+
+        }
+        return;
+
+    }
+
+    method void DibujarDona(){
+
+        do BorrarDona();
+
+        do Screen.drawCircle(x,y,R);
+        do Screen.setColor(false);
+        do Screen.drawCircle(x,y,r);
+        do Screen.setColor(true);
+        return;
+
+    }
+
+    method void BorrarDona(){
+
+        do Screen.setColor(false);
+        do Screen.drawCircle(x,y,R);
+        do Screen.setColor(true);
+        do Screen.drawCircle(x,y,r);
+        return;
+
+    }
+
+
+}

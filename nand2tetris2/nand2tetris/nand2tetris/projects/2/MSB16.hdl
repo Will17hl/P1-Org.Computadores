@@ -1,0 +1,7 @@
+CHIP MSB16 {
+    IN  in[16];
+    OUT out;
+
+    PARTS:
+    Or(a=false, b=in[15], out=out);
+}

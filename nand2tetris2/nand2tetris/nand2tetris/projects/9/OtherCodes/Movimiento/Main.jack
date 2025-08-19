@@ -1,0 +1,14 @@
+class Main {
+
+    function void main(){
+
+        var Dona dona;
+        var int R;
+        let R = 15;
+        let dona = Dona.new(R*2,R*2,R,R/2);
+        do dona.run();
+        return;
+
+    }
+
+}

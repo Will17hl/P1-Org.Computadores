@@ -1,0 +1,12 @@
+CHIP Inc4 {
+    IN in[4];
+    OUT out[4];
+
+    PARTS:
+
+    Not(in=in[0], out=out[0]);
+    HalfAdder(a=in[1], b=in[0], sum=out[1], carry=ct1);
+    HalfAdder(a=in[2], b=ct1, sum=out[2], carry=ct2);
+    HalfAdder(a=in[3], b=ct2, sum=out[3], carry=ct3);
+
+}

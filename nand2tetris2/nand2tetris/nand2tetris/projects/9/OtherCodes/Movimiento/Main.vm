@@ -1,0 +1,20 @@
+function Main.main 2
+push constant 15
+pop local 1
+push local 1
+push constant 2
+call Math.multiply 2
+push local 1
+push constant 2
+call Math.multiply 2
+push local 1
+push local 1
+push constant 2
+call Math.divide 2
+call Dona.new 4
+pop local 0
+push local 0
+call Dona.run 1
+pop temp 0
+push constant 0
+return

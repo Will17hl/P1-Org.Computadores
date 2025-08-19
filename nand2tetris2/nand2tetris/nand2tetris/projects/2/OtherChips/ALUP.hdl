@@ -1,0 +1,28 @@
+CHIP ALUP {
+    IN  
+        x[16], y[16],  // 16-bit inputs        
+        zx, // zero the x input
+        nx, // negate the x input
+        zy, // zero the y input
+        ny, // negate the y input
+        f,  // compute (out = x + y) or (out = x & y)
+        no; // negate the out output
+    OUT 
+        out[16];// 16-bit output
+
+    PARTS:
+
+    Mux16(a=x, b[0]=false, sel=zx, out=zerox);
+    Mux16(a=y, b[0]=false, sel=zy, out=zeroy);
+    Not16(in=x, out=notx);
+    Not16(in=y, out=noty);
+    Mux16(a=zerox, b=notx, sel=nx, out=zeroxornotx);
+    Mux16(a=zeroy, b=noty, sel=ny, out=zeroyornoty);
+    Add16(a=zeroxornotx, b=zeroyornoty, out=addxy);
+    And16(a=zeroxornotx, b=zeroyornoty, out=andxy);
+    Mux16(a=andxy, b=addxy, sel=f, out=outf);
+    Not16(in=outf, out=notoutf);
+    Mux16(a=outf, b=notoutf, sel=no, out=out);
+
+
+}

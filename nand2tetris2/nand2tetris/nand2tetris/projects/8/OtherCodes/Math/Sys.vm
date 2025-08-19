@@ -1,0 +1,14 @@
+function Sys.init 0
+    // a=12 b=3 a/b
+    //push constant 12
+    //push constant 3
+    //call Main.divide 2 // Calls divide function located on Main
+    //pop temp 0
+
+    push constant 1
+    push constant 2
+    call Main.mult 2
+    pop temp 0
+
+label END
+    goto END

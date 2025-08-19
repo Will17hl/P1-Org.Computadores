@@ -1,0 +1,29 @@
+function Main.main 0
+call Main.draw 0
+pop temp 0
+push constant 0
+return
+function Main.draw 1
+push constant 16384
+pop local 0
+push local 0
+push constant 1
+neg
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 1
+add
+push constant 1
+neg
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+push constant 1
+neg
+call Memory.poke 2
+pop temp 0
+push constant 0
+return

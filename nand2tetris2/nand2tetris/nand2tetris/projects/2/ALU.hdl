@@ -1,0 +1,71 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/2/ALU.hdl
+/**
+ * ALU (Arithmetic Logic Unit):
+ * Computes out = one of the following functions:
+ *                0, 1, -1,
+ *                x, y, !x, !y, -x, -y,
+ *                x + 1, y + 1, x - 1, y - 1,
+ *                x + y, x - y, y - x,
+ *                x & y, x | y
+ * on the 16-bit inputs x, y,
+ * according to the input bits zx, nx, zy, ny, f, no.
+ * In addition, computes the two output bits:
+ * if (out == 0) zr = 1, else zr = 0
+ * if (out < 0)  ng = 1, else ng = 0
+ */
+// Implementation: Manipulates the x and y inputs
+// and operates on the resulting values, as follows:
+// if (zx == 1) sets x = 0        // 16-bit constant
+// if (nx == 1) sets x = !x       // bitwise not
+// if (zy == 1) sets y = 0        // 16-bit constant
+// if (ny == 1) sets y = !y       // bitwise not
+// if (f == 1)  sets out = x + y  // integer 2's complement addition
+// if (f == 0)  sets out = x & y  // bitwise and
+// if (no == 1) sets out = !out   // bitwise not
+
+CHIP ALU {
+    IN
+        x[16], y[16],  // Entradas de 16 bits
+        zx, // ¿Poner en cero la entrada x?
+        nx, // ¿Negar la entrada x?
+        zy, // ¿Poner en cero la entrada y?
+        ny, // ¿Negar la entrada y?
+        f,  // Si es 1: out = x + y; si es 0: out = x & y
+        no; // ¿Negar la salida out?
+
+    OUT
+        out[16], // Salida de 16 bits
+        zr, // 1 si (out == 0), 0 en caso contrario
+        ng; // 1 si (out < 0), 0 en caso contrario
+
+    PARTS:
+
+    // Manejo de zx y nx
+    Mux16(a=x, b=false, sel=zx, out=zerox); // Si zx=1, x=0; si zx=0, x=x
+    Not16(in=zerox, out=notx);              // Calcula -x
+    Mux16(a=zerox, b=notx, sel=nx, out=inpx); // Si nx=1, x=-x; si nx=0, x=zerox
+
+    // Manejo de zy y ny
+    Mux16(a=y, b=false, sel=zy, out=zeroy); // Si zy=1, y=0; si zy=0, y=y
+    Not16(in=zeroy, out=noty);              // Calcula -y
+    Mux16(a=zeroy, b=noty, sel=ny, out=inpy); // Si ny=1, y=-y; si ny=0, y=zeroy
+
+    // Operación f (suma o AND)
+    Add16(a=inpx, b=inpy, out=addxy);        // Calcula x + y
+    And16(a=inpx, b=inpy, out=andxy);        // Calcula x & y
+    Mux16(a=andxy, b=addxy, sel=f, out=fxy); // Si f=1, se elige la suma; si f=0, el AND
+
+    // Manejo de no y ng -- ng se toma del bit más significativo (signo en complemento a 2)
+    Not16(in=fxy, out=notfxy);
+    Mux16(a=fxy, b=notfxy, sel=no, out=out, out[0..7] = pzr1, out[8..15] = pzr2, out[15] = ng); 
+    // Si no=1, se niega la salida; ng se obtiene del bit 15 (signo)
+
+    // Cálculo de zr (¿la salida es cero?)
+    Or8Way(in=pzr1, out=zr1);  // Hace OR de los bits 0..7
+    Or8Way(in=pzr2, out=zr2);  // Hace OR de los bits 8..15
+    Or(a=zr1, b=zr2, out=notzr); // Si alguno es 1, entonces la salida no es cero
+    Not(in=notzr, out=zr);       // zr=1 si todo es cero
+}

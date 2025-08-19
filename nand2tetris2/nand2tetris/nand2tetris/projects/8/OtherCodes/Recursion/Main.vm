@@ -1,0 +1,110 @@
+function Main.fibonnacci 1
+
+    push argument 0
+    push constant 2
+    lt
+    if-goto STOP_BASE
+    goto CONTINUE
+
+
+label CONTINUE
+
+    push argument 0
+    push constant 1
+    sub
+    call Main.fibonnacci 1
+
+    push argument 0
+    push constant 2
+    sub
+    call Main.fibonnacci 1
+    add
+    return
+    
+
+label STOP_BASE
+    push argument 0
+    return
+
+// ----------------------------------------------------------------------------------------------------
+
+function Main.mult 2
+    push constant 0
+    pop local 0
+    push constant 0
+    pop local 1
+
+    push argument 0
+    push argument 1
+
+    gt
+    if-goto LOOP_MULT1 // x>y
+    goto LOOP_MULT2
+
+label LOOP_MULT1
+    push local 0
+    push argument 1
+
+    eq
+    if-goto STOP_MULT
+
+    push local 1
+    push argument 0
+    add
+    pop local 1
+
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto LOOP_MULT1
+
+label LOOP_MULT2
+    push local 0
+    push argument 0
+
+    eq
+    if-goto STOP_MULT
+
+    push local 1
+    push argument 1
+    add
+    pop local 1
+
+    push local 0
+    push constant 1
+    add
+    pop local 0
+    goto LOOP_MULT2
+
+label STOP_MULT
+    push local 1
+    return
+
+function Main.factorial 1
+
+    push argument 0
+    push constant 2
+    lt
+    if-goto RETURN_BASE
+    goto CONTINUE_FACTORIAL
+
+label CONTINUE_FACTORIAL
+
+    push argument 0
+    push constant 1
+    sub
+    call Main.factorial 1
+    push argument 0
+    call Main.mult 2
+    return
+
+label RETURN_BASE
+    push constant 1
+    return
+
+
+
+
+
+

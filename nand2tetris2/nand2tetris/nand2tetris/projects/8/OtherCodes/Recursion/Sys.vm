@@ -1,0 +1,12 @@
+function Sys.init 0
+
+    //push constant 4
+    //call Main.fibonnacci 1
+    //pop temp 0
+
+    push constant 3
+    call Main.factorial 1
+    pop temp 0
+
+label END
+    goto END
