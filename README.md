@@ -1,4 +1,4 @@
----# ALU32 – Proyecto Nand2Tetris
+# ALU32 – Parcial en Nand2Tetris
 
 ## Descripción
 
