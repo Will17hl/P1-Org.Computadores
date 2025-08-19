@@ -22,7 +22,7 @@ Además, la ALU produce cuatro banderas de estado:
 * `cout` → carry-out de la suma de 32 bits (válido solo si `f=1`).
 * `ovf` → indica si ocurrió un desbordamiento aritmético en suma con complemento a dos (válido solo si `f=1`).
 
-## 🔧 Entradas y salidas
+## Entradas y salidas
 
 ### Entradas
 
@@ -43,7 +43,7 @@ Además, la ALU produce cuatro banderas de estado:
 * `cout` → Carry-out de la suma de 32 bits.
 * `ovf` → Overflow de suma en complemento a dos.
 
-## 🛠️ Estructura del diseño
+## Estructura del diseño
 
 * **Pre-procesamiento de entradas (x, y)**:
 
@@ -76,7 +76,7 @@ Además, la ALU produce cuatro banderas de estado:
   * `cout`: carry final de la suma de 32 bits (salida de la parte alta).
   * `ovf`: se activa si al sumar dos números con el mismo signo, el resultado cambia de signo.
 
-## 📐 Decisiones de diseño
+## Decisiones de diseño
 
 1. **Extensión a 32 bits por mitades**
 
@@ -98,8 +98,8 @@ Además, la ALU produce cuatro banderas de estado:
    * Las señales de control (`zx, nx, zy, ny, f, no`) mantienen la semántica de la ALU16.
    * Se añadieron `cout` y `ovf` como extensiones extra.
 
-~## Pruebas realizadas
-~
+## Pruebas realizadas
+
 * **Operaciones lógicas** (`AND`, negaciones de entrada y salida).
 * **Operaciones aritméticas** (`+`, con y sin carry).
 * **Casos especiales**:
