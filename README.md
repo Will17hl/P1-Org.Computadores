@@ -142,4 +142,9 @@ Debido a las limitaciones del entorno **nand2tetris**, no fue posible realizar p
     - `0 + 0 → zr = 1`
     - Suma que causa overflow (valor positivo que resulta negativo o viceversa)
     - Propagación de carry entre las mitades de 16 bits (`cout = 1`)
+   
+## Video explicativo:
+
+- https://youtu.be/KNtDQpm98qo?si=Ml_KW2rmZpiTptkB
+
 
